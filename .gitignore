@@ -4,4 +4,5 @@
 *.xlsx
 *.tar
 model.*
-testingData*
+testingData/
+cProfeil.txt
