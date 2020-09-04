@@ -1418,7 +1418,6 @@ def call_variants(args, m, output_config, output_utilities):
                 if not is_finish_loaded_all_mini_batches:
                     thread_pool.append(Thread(target=load_mini_batch))
 
-                print(thread_pool)
                 for t in thread_pool:
                     t.start()
                 for t in thread_pool:
@@ -1436,7 +1435,6 @@ def call_variants(args, m, output_config, output_utilities):
                 break
 
         logging.info("Total time elapsed: %.2f s" % (time() - variant_call_start_time))
-        time_counter["Total_time"].append(round(time() - variant_call_start_time, 4))
         if args.store_loaded_mini_match:
             dd.io.save("prediction_input.h5", mini_batch_prediction_input)
             dd.io.save("prediction_output.h5", mini_batch_prediction_output)
