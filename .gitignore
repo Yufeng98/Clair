@@ -1,7 +1,10 @@
 *.pyc
+*.vscode
 *.h5
-*.xlsx
+*.txt
 *.tar
+*csv*
+*.xlsx
 model.*
 testingData*
 training/

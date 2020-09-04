@@ -171,7 +171,6 @@ def is_too_many_soft_clipped_bases_for_a_read_from(CIGAR):
 
 
 def make_candidates(args):
-
     gen4Training = args.gen4Training
     variant_file_path = args.var_fn
     bed_file_path = args.bed_fn
