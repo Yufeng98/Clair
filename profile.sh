@@ -11,4 +11,6 @@ tar -xf testingData.tar
 wget http://www.bio8.cs.hku.hk/clair_models/illumina/12345.tar
 tar -xf 12345.tar
 
-python3 -m cProfile -o cProfile.txt clair.py callVarBam --chkpnt_fn ./model --bam_fn /z/scratch2/yufenggu/testingData/chr21/chr21.bam --ref_fn /z/scratch2/yufenggu/testingData/chr21/chr21.fa --call_fn ./training/chr21.vcf --sampleName HG001 --pysam_for_all_indel_bases --threads 1 --qual 100 --ctgName chr21 --ctgStart 10269870 --ctgEnd 46672937
+mkdir training
+
+python3 -m cProfile -o cProfile.txt clair.py callVarBam --chkpnt_fn ./model --bam_fn testingData/chr21/chr21.bam --ref_fn testingData/chr21/chr21.fa --call_fn ./training/chr21.vcf --sampleName HG001 --pysam_for_all_indel_bases --threads 1 --qual 100 --ctgName chr21 --ctgStart 10269870 --ctgEnd 46672937
