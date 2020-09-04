@@ -1,5 +1,7 @@
 *.pyc
-*.vscode
 *csv*
 *.h5
-*xlsx
+*.xlsx
+*.tar
+model.*
+testingData*
