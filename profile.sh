@@ -22,7 +22,9 @@ python3 clair.py callVarBam --chkpnt_fn ./model --bam_fn testingData/chr21/chr21
 # Only run prediction function in clair
 python3 clair.py callVarBam --chkpnt_fn ./model --bam_fn testingData/chr21/chr21.bam --ref_fn testingData/chr21/chr21.fa --call_fn ./training/chr21.vcf --sampleName HG001 --pysam_for_all_indel_bases --threads 1 --qual 100 --ctgName chr21 --ctgStart 10269870 --ctgEnd 46672937 --only_prediction --time_counter_file_name time_counter_non_pipeline_1_thread.h5
 
+python3 read_h5.py time_counter_non_pipeline_1_thread.h5
+
 # Run my prediction function
 python3 my_prediction.py --chkpnt_fn ./model --bam_fn testingData/chr21/chr21.bam --ref_fn testingData/chr21/chr21.fa --call_fn ./training/chr21.vcf --sampleName HG001 --pysam_for_all_indel_bases --threads 1 --qual 100
 
-
+python3 read_h5.py time_counter_only_prediction.h5
