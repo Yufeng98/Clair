@@ -1,4 +1,5 @@
 import warnings
+from time import time
 with warnings.catch_warnings():
     warnings.filterwarnings('ignore', category=DeprecationWarning)
     warnings.filterwarnings("ignore", category=FutureWarning)
@@ -950,6 +951,7 @@ class Clair(object):
         Returns:
             prediction: predictions from the model in batch
         """
+        before_pred_time = time()
         transformed_batch_X, _ = self.tensor_transform_function(batchX, None, "predict")
 
         input_dictionary = {
@@ -961,6 +963,7 @@ class Clair(object):
         input_dictionary.update(self.get_structure_dict(phase='predict'))
 
         prediction = self.session.run(self.Y, feed_dict=input_dictionary)
+        print("Model Prediction takes %.4f s" % (time() - before_pred_time))
         self.prediction = prediction
 
         return prediction

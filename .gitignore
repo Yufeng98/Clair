@@ -1,2 +1,8 @@
 *.pyc
 *.vscode
+*.h5
+*.txt
+*.tar
+model.*
+testingData/
+training/
