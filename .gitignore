@@ -1,7 +1,7 @@
 *.pyc
-*csv*
 *.h5
 *.xlsx
 *.tar
 model.*
 testingData*
+training/
