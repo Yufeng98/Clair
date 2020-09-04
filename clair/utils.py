@@ -82,10 +82,12 @@ def tensor_generator_from(tensor_file_path, batch_size):
     processed_tensors = 0
 
     def item_from(row):
+        # print(row)
         columns = row.split()
         return columns[:-input_tensor_size], np.array(columns[-input_tensor_size:], dtype=np.float32)
 
     for batch in batches_from(fo, item_from=item_from, batch_size=batch_size):
+        # tmp_time = time()
         tensors = np.empty((batch_size, input_tensor_size), dtype=np.float32)
         non_tensor_infos = []
         for non_tensor_info, tensor in batch:
@@ -101,6 +103,7 @@ def tensor_generator_from(tensor_file_path, batch_size):
             X[:current_batch_size, :, :, i] -= X[:current_batch_size, :, :, 0]
 
         processed_tensors += current_batch_size
+        # print("Processed %d tensors takes %.4f s" % (processed_tensors, time() - tmp_time), file=sys.stderr)
         print("Processed %d tensors" % processed_tensors, file=sys.stderr)
         if current_batch_size <= 0:
             continue

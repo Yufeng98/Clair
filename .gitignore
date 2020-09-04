@@ -3,3 +3,9 @@
 *csv*
 *.h5
 *xlsx
+*.h5
+*.txt
+*.tar
+model.*
+testingData/
+training/

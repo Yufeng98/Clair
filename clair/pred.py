@@ -11,7 +11,7 @@ from math import log, e
 from enum import IntEnum
 from collections import namedtuple, defaultdict
 
-
+sys.path.append("../")
 import clair.utils as utils
 from clair.model import Clair
 from clair.task.gt21 import (
@@ -1313,20 +1313,15 @@ def call_variants_with_probabilities_input(args, output_config, output_utilities
 
 
 def call_variants(args, m, output_config, output_utilities):
-    output_utilities.output_header()
+    # output_utilities.output_header()
 
     tensor_generator = utils.tensor_generator_from(args.tensor_fn, param.predictBatchSize)
 
     logging.info("Calling variants ...")
-
-    # print(args.only_prediction)
-    # print(args.time_counter_file_name)
-    # print(args.store_loaded_mini_match)
-
     variant_call_start_time = time()
 
     is_finish_loaded_all_mini_batches = False
-    batch_output_method = batch_output_for_ensemble if output_config.is_output_for_ensemble else batch_output
+    # batch_output_method = batch_output_for_ensemble if output_config.is_output_for_ensemble else batch_output
     mini_batches_loaded = []
     mini_batches_to_predict = []
     mini_batches_to_output = []
@@ -1334,9 +1329,7 @@ def call_variants(args, m, output_config, output_utilities):
     mini_batch_prediction_output = []
     time_counter = {"Load_mini_batch": [],
                     "Model_prediction": [],
-                    "Write_batch_to_output": [],
-                    "Total_time": []}
-
+                    "Write_batch_to_output": []}
 
     def load_mini_batch():
         try:
@@ -1344,104 +1337,105 @@ def call_variants(args, m, output_config, output_utilities):
         except StopIteration:
             return
 
-    if args.only_prediction:
-        print("Begin predicting ...")
-        prediction_output = []
-        input_mini_match = dd.io.load("prediction_input.h5")
-        output_mini_match = dd.io.load("prediction_output.h5")
-        begin_time = time()
-        for i in range(len(input_mini_match)):
-            mini_batch = input_mini_match[i]
-            X, _ = mini_batch
-            tmp_time = time()
-            m.predict(X)
-            cost_time = time() - tmp_time
-            print(cost_time)
-            time_counter["Model_prediction"].append(round(cost_time, 4))
-            prediction_output.append(m.prediction)
+    for i in range(115):
+        load_mini_batch_time = time()
+        load_mini_batch()
+        print("Load mini bach costs %.4f" % round(time() - load_mini_batch_time, 4))
+        time_counter["Load_mini_batch"].append(round(time() - load_mini_batch_time, 4))
+    #
+    # mini_batches_loaded = dd.io.load("../prediction_input.h5")
 
-        end_time = time() - begin_time
-
-        comp = []
-        for i in range(len(input_mini_match)):
-            comp.append(np.all(prediction_output[i][0] == output_mini_match[i][0]))
-
-        print(comp)
-        if False not in comp:
-            print("My_prediction function is correct, which takes %.4f s" % end_time)
-        else:
-            print("My_prediction function is wrong, which takes %.4f s" % end_time)
-        dd.io.save("time_counter_only_prediction.h5", time_counter)
+    for i in range(115):
+        mini_batch = mini_batches_loaded[i]
+        X, _ = mini_batch
+        predict_time = time()
+        m.predict(X)
+        time_counter["Model_prediction"].append(round(time() - predict_time, 4))
+        # batch_output_time = time()
+        # batch_output_method(mini_batch, m.prediction, output_config, output_utilities)
+        # time_counter["Write_batch_to_output"].append(round(time() - batch_output_time, 4))
 
 
-    else:
-        while True:
+    # for i in range(115):
+    #
+    #     load_mini_batch_time = time()
+    #     load_mini_batch()
+    #     print("Load mini bach costs %.4f" % round(time() - load_mini_batch_time, 4))
+    #     time_counter["Load_mini_batch"].append(round(time() - load_mini_batch_time, 4))
+    #
+    #     if len(mini_batches_to_output) > 0:
+    #         mini_batch = mini_batches_to_output.pop(0)
+    #         batch_output_time = time()
+    #         batch_output_method(mini_batch, m.prediction, output_config, output_utilities)
+    #         time_counter["Write_batch_to_output"].append(round(time() - batch_output_time, 4))
+    #
+    #     if len(mini_batches_to_predict) > 0:
+    #         mini_batch = mini_batches_to_predict.pop(0)
+    #         X, _ = mini_batch
+    #         predict_time = time()
+    #         m.predict(X)
+    #         time_counter["Model_prediction"].append(round(time() - predict_time, 4))
+    #         mini_batches_to_output.append(mini_batch)
+    #
+    #     if not is_finish_loaded_all_mini_batches:
+    #         load_mini_batch_time = time()
+    #         load_mini_batch()
+    #         print("Load mini bach costs %.4f" % round(time() - load_mini_batch_time, 4))
+    #         time_counter["Load_mini_batch"].append(round(time() - load_mini_batch_time, 4))
 
-            thread_pool = []
+    # while True:
+    #
+    #     thread_pool = []
+    #
+    #     if len(mini_batches_to_output) > 0:
+    #         mini_batch = mini_batches_to_output.pop(0)
+    #         mini_batch_prediction_output.append(m.prediction)
+    #         thread_pool.append(Thread(
+    #             target=batch_output_method, args=(mini_batch, m.prediction, output_config, output_utilities)
+    #         ))
+    #
+    #     if len(mini_batches_to_predict) > 0:
+    #         mini_batch = mini_batches_to_predict.pop(0)
+    #         # mini_batch_prediction_input.append(mini_batch)
+    #         X, _ = mini_batch
+    #         # print(len(mini_batch))
+    #         # print(type(mini_batch[0]), mini_batch[0].shape)
+    #         # print(type(mini_batch[1]), len(mini_batch[1]), mini_batch[1][0])
+    #         thread_pool.append(Thread(target=m.predict, kwargs={"batchX":X}))
+    #         mini_batches_to_output.append(mini_batch)
+    #
+    #
+    #     if not is_finish_loaded_all_mini_batches:
+    #         thread_pool.append(Thread(target=load_mini_batch))
+    #
+    #     print(thread_pool)
+    #     # before_thread_time = time()
+    #     for t in thread_pool:
+    #         # tmp_time = time()
+    #         t.start()
+    #     for t in thread_pool:
+    #         t.join()
+    #         # print(time()-tmp_time)
+    #     # after_thread_time = time() - before_thread_time
+    #     # print(after_thread_time)
 
-            if not args.pipe_line:
-                if len(mini_batches_to_output) > 0:
-                    mini_batch = mini_batches_to_output.pop(0)
-                    batch_output_time = time()
-                    batch_output_method(mini_batch, m.prediction, output_config, output_utilities)
-                    time_counter["Write_batch_to_output"].append(round(time() - batch_output_time, 4))
 
-                if len(mini_batches_to_predict) > 0:
-                    mini_batch = mini_batches_to_predict.pop(0)
-                    X, _ = mini_batch
-                    predict_time = time()
-                    m.predict(X)
-                    time_counter["Model_prediction"].append(round(time() - predict_time, 4))
-                    mini_batches_to_output.append(mini_batch)
+        # is_finish_loaded_all_mini_batches = len(mini_batches_loaded) == 0
+        # while len(mini_batches_loaded) > 0:
+        #     mini_batch = mini_batches_loaded.pop(0)
+        #     mini_batches_to_predict.append(mini_batch)
+        #
+        # is_nothing_to_predict_and_output = (
+        #     len(thread_pool) <= 0 and len(mini_batches_to_predict) <= 0 and len(mini_batches_to_output) <= 0
+        # )
+        # if is_finish_loaded_all_mini_batches and is_nothing_to_predict_and_output:
+        #     break
 
-                if not is_finish_loaded_all_mini_batches:
-                    load_mini_batch_time = time()
-                    load_mini_batch()
-                    print("Load mini bach costs %.4f" % round(time() - load_mini_batch_time, 4))
-                    time_counter["Load_mini_batch"].append(round(time() - load_mini_batch_time, 4))
-            else:
-                if len(mini_batches_to_output) > 0:
-                    mini_batch = mini_batches_to_output.pop(0)
-                    mini_batch_prediction_output.append(m.prediction)
-                    thread_pool.append(Thread(
-                        target=batch_output_method, args=(mini_batch, m.prediction, output_config, output_utilities)
-                    ))
-
-                if len(mini_batches_to_predict) > 0:
-                    mini_batch = mini_batches_to_predict.pop(0)
-                    # mini_batch_prediction_input.append(mini_batch)
-                    X, _ = mini_batch
-                    thread_pool.append(Thread(target=m.predict, kwargs={"batchX":X}))
-                    mini_batches_to_output.append(mini_batch)
-
-
-                if not is_finish_loaded_all_mini_batches:
-                    thread_pool.append(Thread(target=load_mini_batch))
-
-                print(thread_pool)
-                for t in thread_pool:
-                    t.start()
-                for t in thread_pool:
-                    t.join()
-
-            is_finish_loaded_all_mini_batches = len(mini_batches_loaded) == 0
-            while len(mini_batches_loaded) > 0:
-                mini_batch = mini_batches_loaded.pop(0)
-                mini_batches_to_predict.append(mini_batch)
-
-            is_nothing_to_predict_and_output = (
-                len(thread_pool) <= 0 and len(mini_batches_to_predict) <= 0 and len(mini_batches_to_output) <= 0
-            )
-            if is_finish_loaded_all_mini_batches and is_nothing_to_predict_and_output:
-                break
-
-        logging.info("Total time elapsed: %.2f s" % (time() - variant_call_start_time))
-        time_counter["Total_time"].append(round(time() - variant_call_start_time, 4))
-        if args.store_loaded_mini_match:
-            dd.io.save("prediction_input.h5", mini_batch_prediction_input)
-            dd.io.save("prediction_output.h5", mini_batch_prediction_output)
-        dd.io.save(args.time_counter_file_name, time_counter)
-        output_utilities.close_opened_files()
+    logging.info("Total time elapsed: %.2f s" % (time() - variant_call_start_time))
+    # dd.io.save("prediction_input.h5", mini_batch_prediction_input)
+    # dd.io.save("prediction_output.h5", mini_batch_prediction_output)
+    dd.io.save("../time_counter_pred.h5", time_counter)
+    # output_utilities.close_opened_files()
 
 
 def main():
@@ -1502,18 +1496,6 @@ def main():
                         help="Accept probabilities as input, using those probabilities to call variant")
     parser.add_argument('--output_for_ensemble', action='store_true',
                         help="Output for ensemble")
-
-    parser.add_argument('--pipe_line', action='store_true',
-                        help="Cancel multithreading")
-
-    parser.add_argument('--store_loaded_mini_match', action='store_true',
-                        help='Store loaded mini batch to h5 file')
-
-    parser.add_argument('--only_prediction', action='store_true',
-                        help='Only run prediction module')
-
-    parser.add_argument('--time_counter_file_name', type=str, default="time_counter.h5",
-                        help='Set time counter')
 
     args = parser.parse_args()
 
