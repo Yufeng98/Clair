@@ -30,3 +30,10 @@ python3 read_h5.py time_counter_non_pipeline_40_thread.h5
 
 
 
+# Download and extract the testing dataset
+wget 'http://www.bio8.cs.hku.hk/testingData.tar'
+tar -xf testingData.tar
+
+# Download the Illumina model
+wget http://www.bio8.cs.hku.hk/clair_models/illumina/12345.tar
+tar -xf 12345.tar
