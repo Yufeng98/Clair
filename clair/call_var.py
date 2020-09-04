@@ -1415,7 +1415,6 @@ def call_variants(args, m, output_config, output_utilities):
                 if not is_finish_loaded_all_mini_batches:
                     thread_pool.append(Thread(target=load_mini_batch))
 
-                print(thread_pool)
                 for t in thread_pool:
                     t.start()
                 for t in thread_pool:
