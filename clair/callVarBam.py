@@ -90,6 +90,9 @@ def Run(args):
     haploid_precision_mode = command_option_from(args.haploid_precision, 'haploid_precision')
     haploid_sensitive_mode = command_option_from(args.haploid_sensitive, 'haploid_sensitive')
     output_for_ensemble = command_option_from(args.output_for_ensemble, 'output_for_ensemble')
+    pipe_line = command_option_from(args.pipe_line, 'pipe_line')
+    store_loaded_mini_match = command_option_from(args.store_loaded_mini_match, 'store_loaded_mini_match')
+    only_prediction = command_option_from(args.only_prediction, 'only_prediction')
     debug = command_option_from(args.debug, 'debug')
     qual = command_option_from(args.qual, 'qual', option_value=args.qual)
     fast_plotting = command_option_from(args.fast_plotting, 'fast_plotting')
@@ -161,12 +164,16 @@ def Run(args):
         CommandOption('call_fn', call_fn),
         CommandOption('bam_fn', bam_fn),
         CommandOption('sampleName', sampleName),
+        CommandOption('time_counter_file_name', args.time_counter_file_name),
         CommandOption('threads', numCpus),
         CommandOption('ref_fn', ref_fn),
         pysam_for_all_indel_bases,
         haploid_precision_mode,
         haploid_sensitive_mode,
         output_for_ensemble,
+        pipe_line,
+        store_loaded_mini_match,
+        only_prediction,
         qual,
         debug
     ]
@@ -318,6 +325,17 @@ def main():
 
     parser.add_argument('--output_for_ensemble', action='store_true',
                         help="Output for ensemble")
+    parser.add_argument('--pipe_line', action='store_true',
+                        help="Cancel multithreading")
+
+    parser.add_argument('--store_loaded_mini_match', action='store_true',
+                        help='Store loaded mini batch to h5 file')
+
+    parser.add_argument('--only_prediction', action='store_true',
+                        help='Only run prediction module')
+
+    parser.add_argument('--time_counter_file_name', type=str, default="time_counter.h5",
+                        help='Set time counter')
 
     args = parser.parse_args()
 

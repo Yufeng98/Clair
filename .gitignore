@@ -1,2 +1,6 @@
 *.pyc
 *.vscode
+*csv*
+*.h5
+*xlsx
+profile.sh
