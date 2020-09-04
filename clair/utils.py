@@ -84,7 +84,6 @@ def tensor_generator_from(tensor_file_path, batch_size):
     def item_from(row):
         # print(row)
         columns = row.split()
-        # print(columns)
         return columns[:-input_tensor_size], np.array(columns[-input_tensor_size:], dtype=np.float32)
 
     for batch in batches_from(fo, item_from=item_from, batch_size=batch_size):

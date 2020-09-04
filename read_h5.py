@@ -9,4 +9,4 @@ s = 0
 for key in d.keys():
     s += sum(d[key])
 for key in d.keys():
-    print("{:.4f}, {:.2f}%".format(round(sum(d[key]), 4), round(sum(d[key])/s, 4) * 100))
+    print(key, "{:.4f}, {:.2f}%".format(round(sum(d[key]), 4), round(sum(d[key])/s, 4) * 100))

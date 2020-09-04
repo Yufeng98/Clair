@@ -1318,9 +1318,9 @@ def call_variants(args, m, output_config, output_utilities):
     tensor_generator = utils.tensor_generator_from(args.tensor_fn, param.predictBatchSize)
 
     logging.info("Calling variants ...")
-    print(args.only_prediction)
-    print(args.time_counter_file_name)
-    print(args.store_loaded_mini_match)
+    # print(args.only_prediction)
+    # print(args.time_counter_file_name)
+    # print(args.store_loaded_mini_match)
     variant_call_start_time = time()
 
     is_finish_loaded_all_mini_batches = False
@@ -1332,7 +1332,8 @@ def call_variants(args, m, output_config, output_utilities):
     mini_batch_prediction_output = []
     time_counter = {"Load_mini_batch": [],
                     "Model_prediction": [],
-                    "Write_batch_to_output": []}
+                    "Write_batch_to_output": [],
+                    "Total_time": []}
 
     def load_mini_batch():
         try:
@@ -1414,7 +1415,6 @@ def call_variants(args, m, output_config, output_utilities):
                 if not is_finish_loaded_all_mini_batches:
                     thread_pool.append(Thread(target=load_mini_batch))
 
-                print(thread_pool)
                 for t in thread_pool:
                     t.start()
                 for t in thread_pool:

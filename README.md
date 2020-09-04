@@ -45,6 +45,8 @@ This is the formal release of Clair (Clair v2, Dec 2019). You can find the exper
 
 ## What's new?
 
+* 20200831
+    - added support for alternative allele "*". "GetTruth.py" now requires a reference genome as input. You don't need to change your usage if you use "callVarBam.py" for automatic scripts generation.
 * 20200416
     - added two new options for haploid calling, `--haploid_precision` and `--haploid_sensitive` (in [#24](https://github.com/hku-bal/clair/issues/24))
     - added a simple after calling solution to handle overlapped variants (in [#15](https://github.com/hku-bal/clair/issues/15))
@@ -126,7 +128,7 @@ conda install -c conda-forge parallel=20191122 zstd=1.4.4
 conda install -c bioconda samtools=1.10 vcflib=1.0.0 bcftools=1.10.2
 
 # clone Clair
-git clone https://github.com/HKU-BAL/Clair.git
+git clone --depth 1 https://github.com/HKU-BAL/Clair.git
 cd Clair
 chmod +x clair.py
 export PATH=`pwd`":$PATH"
@@ -144,7 +146,7 @@ Then download the trained models referring to `download the trained model` in [I
 
 ```bash
 # clone Clair
-git clone https://github.com/HKU-BAL/Clair.git
+git clone --depth 1 https://github.com/HKU-BAL/Clair.git
 cd Clair
 
 # build a docker image named clair_docker_image
@@ -340,7 +342,7 @@ Submodules in __`clair/`__ are for variant calling and model training. Submodule
 `dataPrepScripts/` | Note: submodules under this folder is Pypy compatiable unless specified.
 ---: | ---
 `ExtractVariantCandidates`| Extract the position of variant candidates.<br>Input: BAM; Reference FASTA.<br>_Important option(s):<br>`--threshold` "Minimum alternative allele frequency to report a candidate"<br>`--minCoverage` "Minimum coverage to report a candidate"_
-`GetTruth`| Extract the variants from a truth VCF. Input: VCF.
+`GetTruth`| Extract the variants from a truth VCF. Input: VCF; Reference FASTA if the vcf contains asterisks in ALT field.
 `CreateTensor`| Create tensors for candidates or truth variants.<br>Input: A candidate list; BAM; Reference FASTA.
 `PairWithNonVariants`| Pair truth variant tensors with non-variant tensors.<br>Input: Truth variants tensors; Candidate variant tensors.<br>_Important option(s):<br>`--amp x` "1-time truth variants + x-time non-variants"._
 `Tensor2Bin` | Create a compressed binary tensors file to facilitate and speed up future usage.<br>Input: Mixed tensors by `PairWithNonVariants`; Truth variants by `GetTruth` and a BED file marks the high confidence regions in the reference genome.<br>(Pypy incompatible)
@@ -355,7 +357,7 @@ Please download models from [here](http://www.bio8.cs.hku.hk/clair_models/) or c
 Folder | Tech | Suggested | Sample used | Aligner | Download |
 --- | :---: | :---: | :---: | :---: | :---: |
 illumina | Illumina | * | HG001,2,3,4,5 | Novoalign | [Download](http://www.bio8.cs.hku.hk/clair_models/illumina/12345.tar)
-pacbio/ccs | PacBio CCS | * |HG001,5 | Minimap2 | [Download](http://www.bio8.cs.hku.hk/clair_models/pacbio/ccs/15.tar)
+pacbio/ccs | PacBio CCS (HiFi) | * |HG001,5 | Minimap2 | [Download](http://www.bio8.cs.hku.hk/clair_models/pacbio/ccs/15.tar)
 ont | ONT R9.4.1 | | HG001,2 | Minimap2 | [Download](http://www.bio8.cs.hku.hk/clair_models/ont/12.tar)
 ont | ONT R9.4.1 | | HG001,2,3,4 | Minimap2 | [Download](http://www.bio8.cs.hku.hk/clair_models/ont/1234.tar)
 ont | ONT R9.4.1 | * | HG001,2,2HD,3,4 | Minimap2 | [Download](http://www.bio8.cs.hku.hk/clair_models/ont/122HD34.tar)

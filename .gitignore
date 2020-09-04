@@ -6,3 +6,6 @@
 model.*
 testingData/
 training/
+*csv*
+*.h5
+*.xlsx
