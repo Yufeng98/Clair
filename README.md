@@ -109,5 +109,8 @@ Then download the trained models referring to `download the trained model` in [I
 
 Run command
 ```shell
+# download models
+wget http://www.bio8.cs.hku.hk/clair_models/illumina/12345.tar
+tar -xf 12345.tar
 python3 my_prediction.py --chkpnt_fn ./model --sampleName HG001 --pysam_for_all_indel_bases --threads 1 --qual 100
 ```
