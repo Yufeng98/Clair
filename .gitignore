@@ -6,5 +6,5 @@
 *csv*
 *.xlsx
 model.*
-testingData/
+testingData*
 training/

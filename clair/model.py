@@ -951,11 +951,7 @@ class Clair(object):
         Returns:
             prediction: predictions from the model in batch
         """
-<<<<<<< HEAD
         before_pred_time = time()
-=======
-        # before_pred_time = time()
->>>>>>> origin/master
         transformed_batch_X, _ = self.tensor_transform_function(batchX, None, "predict")
 
         input_dictionary = {

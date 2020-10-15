@@ -1,3 +1,4 @@
+#!/bin/bash
 # Download and extract the testing dataset
 wget 'http://www.bio8.cs.hku.hk/testingData.tar'
 tar -xf testingData.tar
