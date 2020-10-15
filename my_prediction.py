@@ -12,8 +12,8 @@ def prediction(args, m):
 
     print("Begin predicting...")
     prediction_output = []
-    input_mini_match = dd.io.load("prediction_input.h5")
-    output_mini_match = dd.io.load("prediction_output.h5")
+    input_mini_match = dd.io.load(args.input_fn)
+    output_mini_match = dd.io.load(args.output_fn)
     time_counter = {"Load_mini_batch": [],
                     "Model_prediction": [],
                     "Write_batch_to_output": []}
@@ -69,6 +69,12 @@ def Run(args):
 def main():
     parser = ArgumentParser(description="Call variants using a trained model and tensors of candididate variants")
 
+    parser.add_argument('--input_fn', type=str, default="prediction_input.h5",
+                        help="input file")
+
+    parser.add_argument('--output_fn', type=str, default="prediction_output.h5",
+                        help="output file")
+
     parser.add_argument('--tensor_fn', type=str, default="PIPE",
                         help="Tensor input, use PIPE for standard input")
 
@@ -99,31 +105,6 @@ def main():
     parser.add_argument('--threads', type=int, default=None,
                         help="Number of threads, optional")
 
-    parser.add_argument('--activation_only', action='store_true',
-                        help="Output activation only, no prediction")
-    parser.add_argument('--max_plot', type=int, default=10,
-                        help="The maximum number of plots output, negative number means no limit (plot all), default: %(default)s")
-    parser.add_argument('--log_path', type=str, nargs='?', default=None,
-                        help="The path for tensorflow logging, default: %(default)s")
-    parser.add_argument('-p', '--parallel_level', type=int, default=2,
-                        help="The level of parallelism in plotting (currently available: 0, 2), default: %(default)s")
-    parser.add_argument('--fast_plotting', action='store_true',
-                        help="Enable fast plotting.")
-    parser.add_argument('-w', '--workers', type=int, default=8,
-                        help="The number of workers in plotting, default: %(default)s")
-
-    parser.add_argument('--pysam_for_all_indel_bases', action='store_true',
-                        help="Always using pysam for outputting indel bases, optional")
-
-    parser.add_argument('--haploid_precision', action='store_true',
-                        help="call haploid instead of diploid (output homo-variant only)")
-    parser.add_argument('--haploid_sensitive', action='store_true',
-                        help="call haploid instead of diploid (output non-multi-variant only)")
-
-    parser.add_argument('--input_probabilities', action='store_true',
-                        help="Accept probabilities as input, using those probabilities to call variant")
-    parser.add_argument('--output_for_ensemble', action='store_true',
-                        help="Output for ensemble")
 
     args = parser.parse_args()
 
