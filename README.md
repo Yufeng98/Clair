@@ -1,6 +1,4 @@
-## Installation
-
-### Option 1. Bioconda
+### Installation
 
 ```bash
 # make sure channels are added in conda
@@ -27,8 +25,13 @@ pypy3 -m ensurepip
 pypy3 -m pip install --no-cache-dir intervaltree==3.0.2
 ```
 
+### Create dataset
 
-### After Installation
+```shell
+python3 clair.py callVarBam --chkpnt_fn ./model --bam_fn <chr.bam.bai> --ref_fn <chr20.fa>  --call_fn .chr20.vcf --pysam_for_all_indel_bases --threads 1 --qual 100 --ctgName chr20 --ctgStart 10269870 --ctgEnd 46672937 --pipe_line --store_loaded_mini_match
+```
+
+### Run command
 
 Run command
 ```shell
