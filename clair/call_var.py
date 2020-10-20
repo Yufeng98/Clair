@@ -1409,7 +1409,7 @@ def call_variants(args, m, output_config, output_utilities):
 
                 if len(mini_batches_to_predict) > 0:
                     mini_batch = mini_batches_to_predict.pop(0)
-                    # mini_batch_prediction_input.append(mini_batch)
+                    mini_batch_prediction_input.append(mini_batch)
                     X, _ = mini_batch
                     thread_pool.append(Thread(target=m.predict, kwargs={"batchX":X}))
                     mini_batches_to_output.append(mini_batch)
