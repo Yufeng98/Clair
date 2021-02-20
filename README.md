@@ -11,6 +11,13 @@ conda create -n clair-env -c bioconda clair
 conda activate clair-env
 conda install deepdish
 
+# clone project from GitHub
+git clone https://github.com/Yufeng98/Clair
+cd Clair
+
+# set PythonPath (for loading shared.params)
+export PYTHONPATH=`pwd`:$PYTHONPATH
+
 # store clair.py PATH into $CLAIR variable
 CLAIR=`which clair.py`
 
